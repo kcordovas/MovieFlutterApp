@@ -32,6 +32,9 @@ dependencies:
   # Swipe Library
   # https://pub.dev/packages/flutter_swiper/install
   flutter_swiper: ^1.1.6
+  # Flutter HTTP
+  # https://pub.dev/packages/http/install
+  http: ^0.12.2
 
 dev_dependencies:
   flutter_test:
