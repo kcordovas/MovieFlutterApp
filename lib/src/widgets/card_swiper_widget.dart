@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:movieflutterapp/src/models/film_model.dart';
 
 /*
  * Card Widget to re-use custom widget
  */
 class CardSwiper extends StatelessWidget {
   // Init Films List of dynamic type (change in future)
-  final List<dynamic> films;
+  final List<Film> films;
 
   // Init Constructor to request Films List
   CardSwiper({@required this.films});
@@ -35,8 +36,11 @@ class CardSwiper extends StatelessWidget {
             // BorderRadius allow to define an radio
             // with double value
             borderRadius: BorderRadius.circular(20.0),
-            child: Image.network(
-              "http://via.placeholder.com/350x150",
+            // Use FadeInImage,
+            // because the user could be a slow internet
+            child: FadeInImage(
+              placeholder: AssetImage('assets/img/no-image.jpg'),
+              image: NetworkImage(films[index].getPosterImg()),
               fit: BoxFit.cover,
             ),
           );

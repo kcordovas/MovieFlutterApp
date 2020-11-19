@@ -83,4 +83,11 @@ class Film {
     overview = json['overview'];
     releaseDate = json['release_date'];
   }
+
+  String getPosterImg() {
+    if (posterPath == null) {
+      return "https://www.kubookstore.com/sca-dev-vinson/img/no_image_available.jpeg";
+    }
+    return "https://image.tmdb.org/t/p/w500/$posterPath";
+  }
 }

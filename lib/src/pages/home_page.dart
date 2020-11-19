@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:movieflutterapp/src/providers/movies_provider.dart';
 import 'package:movieflutterapp/src/widgets/card_swiper_widget.dart';
+import 'package:movieflutterapp/src/widgets/movie_horizontal.dart';
 
 // Home page, Route '/'
 class HomePage extends StatelessWidget {
-  const HomePage({Key key}) : super(key: key);
+  final provider = MoviesProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +23,62 @@ class HomePage extends StatelessWidget {
       // body: SafeArea(child: Text('Hello world')),
       body: Container(
         child: Column(
-          children: <Widget>[_swiperTarjetas()],
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            _swiperTarjetas(),
+            _footer(context),
+          ],
         ),
       ),
     );
   }
 
   Widget _swiperTarjetas() {
-    MoviesProvider provider = MoviesProvider();
-    provider.getInCinemas();
-    return CardSwiper(films: [1, 2, 3, 4, 5]);
+    // Create with snippet FutureBuilder
+    // FutureBuilder to json response with async task
+    return FutureBuilder(
+      // FUture, is provider.getCinemas
+      future: provider.getInCinemas(),
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+        // Snapshot could be empty or null
+        if (!snapshot.hasData) {
+          // Return an Progress Indicator (Widget)
+          return Container(
+              height: 400.0, child: Center(child: CircularProgressIndicator()));
+        }
+        // Return CardSwiper, with param data snapshot
+        return CardSwiper(films: snapshot.data);
+      },
+    );
+  }
+
+  Widget _footer(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(left: 20.0),
+            child: Text(
+              'Populars',
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+          ),
+          SizedBox(
+            height: 5.0,
+          ),
+          FutureBuilder(
+            future: provider.getPopulars(),
+            builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+              if (snapshot.hasData) {
+                return MovieHorizontal(films: snapshot.data);
+              }
+              return Center(child: CircularProgressIndicator());
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
