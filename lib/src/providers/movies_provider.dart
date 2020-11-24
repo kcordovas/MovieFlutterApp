@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 
+import 'dart:async';
 import 'dart:convert';
 import 'package:movieflutterapp/src/models/film_model.dart';
 
@@ -10,6 +11,29 @@ class MoviesProvider {
   String _url = 'api.themoviedb.org';
   // Language
   String _language = 'en-US';
+
+  // Page is to load new films
+  int _popularsPage = 0;
+
+  List<Film> _populars = new List();
+
+  // Create StreamController that send Film List
+  // Broadcast is the type: is could to be to uses in some widgets
+  final _popularStreamController = StreamController<List<Film>>.broadcast();
+
+  // Add data to Stream
+  Function(List<Film>) get popularsSick => _popularStreamController.sink.add;
+
+  // Get Data with StreamController
+  Stream<List<Film>> get popularsStream => _popularStreamController.stream;
+
+  /**
+   * StreamController always close with close method
+   * '?' this letter is to verify that is nullable
+   */
+  void disposeStream() {
+    _popularStreamController?.close();
+  }
 
   /**
    * Process Response json and transform in List<Film>
@@ -39,9 +63,18 @@ class MoviesProvider {
    * @return Future<List<Film>>
    */
   Future<List<Film>> getPopulars() async {
-    final url = Uri.https(
-        _url, '3/movie/popular', {'api_key': _apiKey, 'language': _language});
+    _popularsPage++;
+    final url = Uri.https(_url, '3/movie/popular', {
+      'api_key': _apiKey,
+      'language': _language,
+      'page': _popularsPage.toString()
+    });
 
-    return await _processingResponse(url);
+    final resp = await _processingResponse(url);
+
+    _populars.addAll(resp);
+    popularsSick(_populars);
+
+    return resp;
   }
 }
