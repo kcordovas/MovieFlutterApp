@@ -42,9 +42,41 @@ class MovieHorizontal extends StatelessWidget {
       // PageView is a widget that allows
       // the effect how an tab effect,
       // could be, Horizontal or vertical
-      child: PageView(
+      child: PageView.builder(
         controller: _pageController,
-        children: _tarjetas(context),
+        itemCount: films.length,
+        itemBuilder: (context, position) =>
+            _createCard(context, films[position], _screenSize),
+        //children: _tarjetas(context),
+      ),
+    );
+  }
+
+  Widget _createCard(BuildContext context, Film film, Size _screenSize) {
+    return Container(
+      margin: EdgeInsets.only(right: 15.0),
+      child: Column(
+        children: [
+          // ClipRRect allow give an borderRadius
+          // for the widget
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: FadeInImage(
+              placeholder: AssetImage('assets/img/no-image.jpg'),
+              image: NetworkImage(film.getPosterImg()),
+              fit: BoxFit.cover,
+              height: _screenSize.height * 0.15,
+            ),
+          ),
+          SizedBox(
+            width: 5.0,
+          ),
+          Text(
+            film.title,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ],
       ),
     );
   }
