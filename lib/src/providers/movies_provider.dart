@@ -15,6 +15,8 @@ class MoviesProvider {
   // Page is to load new films
   int _popularsPage = 0;
 
+  bool _loading = false;
+
   List<Film> _populars = new List();
 
   // Create StreamController that send Film List
@@ -63,6 +65,8 @@ class MoviesProvider {
    * @return Future<List<Film>>
    */
   Future<List<Film>> getPopulars() async {
+    if (_loading) return [];
+    _loading = true;
     _popularsPage++;
     final url = Uri.https(_url, '3/movie/popular', {
       'api_key': _apiKey,
@@ -74,6 +78,8 @@ class MoviesProvider {
 
     _populars.addAll(resp);
     popularsSick(_populars);
+
+    _loading = false;
 
     return resp;
   }
