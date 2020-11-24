@@ -5,24 +5,45 @@ class MovieHorizontal extends StatelessWidget {
   // Create List<Films> to global instance
   final List<Film> films;
 
+  // This function is an callback
+  // to add new pages to PageView
+  final Function nextPage;
+
   // Constructor that required Film List
-  MovieHorizontal({@required this.films});
+  // required callback Function nextPage
+  MovieHorizontal({@required this.films, @required this.nextPage});
+
+  // Create an PageController Object
+  // used to create an listener
+  final _pageController = new PageController(
+    initialPage: 0,
+    // ViewPortFraction allow show in the same screen
+    // some pages
+    viewportFraction: 0.2,
+  );
 
   @override
   Widget build(BuildContext context) {
     final _screenSize = MediaQuery.of(context).size;
+
+    // Listener to identify the final of page
+    _pageController.addListener(() {
+      // Condition to detect the final with -200 pixel
+      // Not is final exactly
+      if (_pageController.position.pixels >=
+          _pageController.position.maxScrollExtent - 200) {
+        // call to us callback
+        nextPage();
+      }
+    });
+
     return Container(
       height: _screenSize.height * 0.2,
       // PageView is a widget that allows
       // the effect how an tab effect,
       // could be, Horizontal or vertical
       child: PageView(
-        controller: PageController(
-          initialPage: 0,
-          // ViewPortFraction allow show in the same screen
-          // some pages
-          viewportFraction: 0.2,
-        ),
+        controller: _pageController,
         children: _tarjetas(context),
       ),
     );
