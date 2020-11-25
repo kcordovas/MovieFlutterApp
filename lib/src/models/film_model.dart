@@ -90,4 +90,11 @@ class Film {
     }
     return "https://image.tmdb.org/t/p/w500/$posterPath";
   }
+
+  String getBackgroundImg() {
+    if (posterPath == null) {
+      return "https://www.kubookstore.com/sca-dev-vinson/img/no_image_available.jpeg";
+    }
+    return "https://image.tmdb.org/t/p/w500/$backdropPath";
+  }
 }
