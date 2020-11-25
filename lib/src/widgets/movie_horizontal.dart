@@ -52,8 +52,14 @@ class MovieHorizontal extends StatelessWidget {
     );
   }
 
+  /**
+   * Create an Card (only Card)
+   * @context - requeried to Theme
+   * @film - Object Film of Films list
+   * @_screenSize use to re-dimens the card to ajust on screen
+   */
   Widget _createCard(BuildContext context, Film film, Size _screenSize) {
-    return Container(
+    final _card = Container(
       margin: EdgeInsets.only(right: 15.0),
       child: Column(
         children: [
@@ -78,6 +84,21 @@ class MovieHorizontal extends StatelessWidget {
           ),
         ],
       ),
+    );
+
+    // GestureDectector to detect an gesture on a Widget
+    return GestureDetector(
+      child: _card,
+      // Tap Method is ony click on Widget
+      onTap: () {
+        print('ID Pelicula ${film.title}');
+        Navigator.pushNamed(
+          context,
+          'detail',
+          // Arguments could to be either object
+          arguments: film,
+        );
+      },
     );
   }
 
