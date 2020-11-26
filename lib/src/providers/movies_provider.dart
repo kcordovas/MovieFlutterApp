@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:movieflutterapp/src/models/actors_model.dart';
 
 import 'dart:async';
 import 'dart:convert';
@@ -82,5 +83,25 @@ class MoviesProvider {
     _loading = false;
 
     return resp;
+  }
+
+  ///**
+  /// Create a request to get Json of API movie credits
+  /// @filmId is the movie ID to get the actor list in base a movie
+  /// */
+  Future<List<Actor>> getCast(String filmId) async {
+    final url = Uri.https(_url, '3/movie/$filmId/credits', {
+      'api_key': _apiKey,
+      'language': _language,
+    });
+
+    print(url.toString());
+
+    final response = await http.get(url);
+    final decodeData = json.decode(response.body);
+
+    final modelCast = Cast.fromJsonList(decodeData['cast']);
+
+    return modelCast.actors;
   }
 }
