@@ -32,7 +32,7 @@ class CardSwiper extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           // ClipRect is an Widget to make an shape
           // an image
-          return ClipRRect(
+          final clipRect = ClipRRect(
             // BorderRadius allow to define an radio
             // with double value
             borderRadius: BorderRadius.circular(20.0),
@@ -43,6 +43,13 @@ class CardSwiper extends StatelessWidget {
               image: NetworkImage(films[index].getPosterImg()),
               fit: BoxFit.cover,
             ),
+          );
+
+          return GestureDetector(
+            child: clipRect,
+            onTap: () {
+              Navigator.pushNamed(context, 'detail', arguments: films[index]);
+            },
           );
         },
         itemCount: 3,

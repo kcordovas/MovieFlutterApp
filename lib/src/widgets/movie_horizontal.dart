@@ -91,7 +91,6 @@ class MovieHorizontal extends StatelessWidget {
       child: _card,
       // Tap Method is ony click on Widget
       onTap: () {
-        print('ID Pelicula ${film.title}');
         Navigator.pushNamed(
           context,
           'detail',
