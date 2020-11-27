@@ -56,37 +56,43 @@ class FilmDetail extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
         children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: Image(
-              image: NetworkImage(film.getPosterImg()),
-              height: 150.0,
+          Hero(
+            tag: film.id,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: Image(
+                image: NetworkImage(film.getPosterImg()),
+                height: 150.0,
+              ),
             ),
           ),
           Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  film.title,
-                  style: Theme.of(context).textTheme.headline5,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  film.originalTitle,
-                  style: Theme.of(context).textTheme.subtitle1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Row(
-                  children: [
-                    Icon(Icons.star),
-                    Text(
-                      film.voteAverage.toString(),
-                      style: Theme.of(context).textTheme.subtitle1,
-                    ),
-                  ],
-                ),
-              ],
+            child: Container(
+              padding: EdgeInsets.only(left: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    film.title,
+                    style: Theme.of(context).textTheme.headline5,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    film.originalTitle,
+                    style: Theme.of(context).textTheme.subtitle1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.star),
+                      Text(
+                        film.voteAverage.toString(),
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           )
         ],

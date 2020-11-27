@@ -63,15 +63,20 @@ class MovieHorizontal extends StatelessWidget {
       margin: EdgeInsets.only(right: 15.0),
       child: Column(
         children: [
-          // ClipRRect allow give an borderRadius
-          // for the widget
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: FadeInImage(
-              placeholder: AssetImage('assets/img/no-image.jpg'),
-              image: NetworkImage(film.getPosterImg()),
-              fit: BoxFit.cover,
-              height: _screenSize.height * 0.15,
+          // Hero is an animations
+          // that flies the hero from one route to a new route
+          Hero(
+            tag: film.id,
+            // ClipRRect allow give an borderRadius
+            // for the widget
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: FadeInImage(
+                placeholder: AssetImage('assets/img/no-image.jpg'),
+                image: NetworkImage(film.getPosterImg()),
+                fit: BoxFit.cover,
+                height: _screenSize.height * 0.15,
+              ),
             ),
           ),
           SizedBox(
@@ -101,10 +106,8 @@ class MovieHorizontal extends StatelessWidget {
     );
   }
 
-  /**
-   * Create a Widget Cards List to showing Image and a subtitle
-   * @return List<Widget> return List on List<Film> 
-   */
+  /// Create a Widget Cards List to showing Image and a subtitle
+  /// @return List<Widget> return List on List<Film>
   List<Widget> _tarjetas(BuildContext context) {
     final _screenSize = MediaQuery.of(context).size;
 
