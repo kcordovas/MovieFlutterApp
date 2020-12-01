@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:movieflutterapp/src/models/film_model.dart';
+import 'package:movieflutterapp/src/providers/movies_provider.dart';
 
 class DataSearch extends SearchDelegate {
+  final filmProvider = MoviesProvider();
+
   String selection = '';
   final films = ['Superman', 'Hard kill', 'Chick Fight', 'Peninswa'];
 
@@ -45,25 +49,34 @@ class DataSearch extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     // Suggestions when typing
-
-    final suggestionList = (query.isEmpty)
-        ? recentsFilms
-        : films
-            .where((element) =>
-                element.toLowerCase().startsWith(query.toLowerCase()))
-            .toList();
-
-    return ListView.builder(
-      itemCount: suggestionList.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          leading: Icon(Icons.movie),
-          title: Text(suggestionList[index]),
-          onTap: () {
-            selection = suggestionList[index];
-            showResults(context);
-          },
-        );
+    if (query.isEmpty) return Container();
+    return FutureBuilder(
+      future: filmProvider.searchFilm(query),
+      builder: (BuildContext context, AsyncSnapshot<List<Film>> snapshot) {
+        if (snapshot.hasData) {
+          final films = snapshot.data;
+          return ListView.builder(
+            itemCount: films.length,
+            itemBuilder: (context, index) {
+              final film = films[index];
+              return ListTile(
+                leading: FadeInImage(
+                  placeholder: AssetImage('assets/img/no-image.jpg'),
+                  image: NetworkImage(film.getPosterImg()),
+                  width: 50.0,
+                  fit: BoxFit.contain,
+                ),
+                title: Text(film.title),
+                subtitle: Text(film.originalTitle),
+                onTap: () {
+                  close(context, null);
+                  Navigator.pushNamed(context, 'detail', arguments: film);
+                },
+              );
+            },
+          );
+        }
+        return Center(child: CircularProgressIndicator());
       },
     );
   }
